@@ -7,6 +7,7 @@ import (
 
 	"github.com/Aditya7880900936/Multi-Window-Media-Sequencer/backend/internal/config"
 	"github.com/Aditya7880900936/Multi-Window-Media-Sequencer/backend/internal/database"
+	"github.com/Aditya7880900936/Multi-Window-Media-Sequencer/backend/internal/model"
 )
 
 func main() {
@@ -22,6 +23,20 @@ func main() {
 		panic(err)
 	}
 	defer sqlDB.Close()
+
+	err = db.AutoMigrate(
+		&model.Window{},
+		&model.Media{},
+		&model.PlaylistItem{},
+		&model.SyncEvent{},
+	)
+	if err != nil {
+		panic(err)
+	}
+
+	if err := database.Seed(db); err != nil {
+		panic(err)
+	}
 
 	router := gin.Default()
 
