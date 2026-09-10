@@ -52,16 +52,19 @@ func main() {
 	mediaService := service.NewMediaService(mediaRepo)
 	playlistService := service.NewPlaylistService(playlistRepo)
 
-	// Handlers
-	windowHandler := handler.NewWindowHandler(windowService)
-	mediaHandler := handler.NewMediaHandler(mediaService)
-	playlistHandler := handler.NewPlaylistHandler(playlistService)
-
 	// WebSocket Hub
 	hub := ws.NewHub()
 	go hub.Run()
 
+	// Sync Service
+	syncService := service.NewSyncService(db, hub)
+
+	// Handlers
+	windowHandler := handler.NewWindowHandler(windowService)
+	mediaHandler := handler.NewMediaHandler(mediaService)
+	playlistHandler := handler.NewPlaylistHandler(playlistService)
 	websocketHandler := handler.NewWebSocketHandler(hub)
+	syncHandler := handler.NewSyncHandler(syncService)
 
 	router := gin.Default()
 
@@ -90,6 +93,9 @@ func main() {
 	api.GET("/windows/:id/playlist", playlistHandler.GetByWindowID)
 	api.POST("/windows/:id/playlist", playlistHandler.Create)
 	api.DELETE("/windows/:id/playlist/:itemId", playlistHandler.Delete)
+
+	// Sync
+	api.POST("/sync", syncHandler.Sync)
 
 	if err := router.Run(":8080"); err != nil {
 		panic(err)
