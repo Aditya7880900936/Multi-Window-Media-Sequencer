@@ -11,6 +11,7 @@ import (
 	"github.com/Aditya7880900936/Multi-Window-Media-Sequencer/backend/internal/model"
 	"github.com/Aditya7880900936/Multi-Window-Media-Sequencer/backend/internal/repository"
 	"github.com/Aditya7880900936/Multi-Window-Media-Sequencer/backend/internal/service"
+	ws "github.com/Aditya7880900936/Multi-Window-Media-Sequencer/backend/internal/websocket"
 )
 
 func main() {
@@ -56,6 +57,12 @@ func main() {
 	mediaHandler := handler.NewMediaHandler(mediaService)
 	playlistHandler := handler.NewPlaylistHandler(playlistService)
 
+	// WebSocket Hub
+	hub := ws.NewHub()
+	go hub.Run()
+
+	websocketHandler := handler.NewWebSocketHandler(hub)
+
 	router := gin.Default()
 
 	// Health
@@ -64,6 +71,9 @@ func main() {
 			"status": "ok",
 		})
 	})
+
+	// WebSocket
+	router.GET("/ws", websocketHandler.Handle)
 
 	// API
 	api := router.Group("/api")
