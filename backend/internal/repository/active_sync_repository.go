@@ -5,6 +5,7 @@ import (
 
 	"github.com/Aditya7880900936/Multi-Window-Media-Sequencer/backend/internal/model"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 type ActiveSyncRepository struct {
@@ -18,10 +19,9 @@ func NewActiveSyncRepository(db *gorm.DB) *ActiveSyncRepository {
 func (r *ActiveSyncRepository) Get() (*model.ActiveSync, error) {
 	var sync model.ActiveSync
 
-	err := r.db.
-		Preload("Media").
-		First(&sync, 1).
-		Error
+	err := r.db.Session(&gorm.Session{
+		Logger: logger.Default.LogMode(logger.Silent),
+	}).Preload("Media").First(&sync, 1).Error
 
 	if err != nil {
 		return nil, err
