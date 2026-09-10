@@ -7,6 +7,7 @@ import {
 function MediaWindow({ windowData, refreshKey }) {
   const [playback, setPlayback] = useState(null);
   const [media, setMedia] = useState([]);
+
   const videoRef = useRef(null);
   const currentMediaIdRef = useRef(null);
 
@@ -25,10 +26,11 @@ function MediaWindow({ windowData, refreshKey }) {
   useEffect(() => {
     async function load() {
       try {
-        const [playbackResponse, mediaResponse] = await Promise.all([
-          getCurrentPlayback(windowData.id),
-          getMedia(),
-        ]);
+        const [playbackResponse, mediaResponse] =
+          await Promise.all([
+            getCurrentPlayback(windowData.id),
+            getMedia(),
+          ]);
 
         setPlayback(playbackResponse.data);
         setMedia(mediaResponse.data);
@@ -59,7 +61,7 @@ function MediaWindow({ windowData, refreshKey }) {
   }, [loadPlayback]);
 
   const currentMedia = media.find(
-    (item) => item.id === playback?.MediaID
+    (item) => item.id === playback?.mediaId
   );
 
   // Only seek video when the actual media changes.

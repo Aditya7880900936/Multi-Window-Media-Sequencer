@@ -81,10 +81,25 @@ func main() {
 
 	router := gin.Default()
 
+	frontendURL := cfg.FrontendURL
+
+	if frontendURL == "" {
+		frontendURL = "http://localhost:5173"
+	}
+
 	router.Use(func(c *gin.Context) {
-		c.Writer.Header().Set("Access-Control-Allow-Origin", "http://localhost:5173")
-		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
-		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+		c.Writer.Header().Set(
+			"Access-Control-Allow-Origin",
+			frontendURL,
+		)
+		c.Writer.Header().Set(
+			"Access-Control-Allow-Methods",
+			"GET, POST, PUT, DELETE, OPTIONS",
+		)
+		c.Writer.Header().Set(
+			"Access-Control-Allow-Headers",
+			"Content-Type",
+		)
 
 		if c.Request.Method == http.MethodOptions {
 			c.AbortWithStatus(http.StatusNoContent)
@@ -93,7 +108,6 @@ func main() {
 
 		c.Next()
 	})
-
 	// Health
 	router.GET("/health", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{

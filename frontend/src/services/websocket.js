@@ -1,4 +1,6 @@
-const WS_URL = "ws://localhost:8080/ws";
+const WS_URL =
+  import.meta.env.VITE_WS_URL ||
+  `${window.location.protocol === "https:" ? "wss" : "ws"}://${window.location.host}/ws`;
 
 export function connectWebSocket(onMessage) {
   const socket = new WebSocket(WS_URL);
