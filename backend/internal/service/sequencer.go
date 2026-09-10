@@ -7,12 +7,11 @@ import (
 )
 
 type PlaybackState struct {
-	MediaID   uint
-	Position  int
-	Offset    int
-	StartedAt time.Time
+	MediaID   uint      `json:"mediaId"`
+	Position  int       `json:"position"`
+	Offset    int       `json:"offset"`
+	StartedAt time.Time `json:"startedAt"`
 }
-
 type Sequencer struct {
 	CycleDuration time.Duration
 }
