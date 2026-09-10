@@ -4,11 +4,9 @@ A full-stack media sequencing application that manages multiple display windows,
 
 ## Live Deployment
 
-- Frontend: `<https://media-sequencer-frontend.onrender.com>`
+- Frontend: [Open the deployed frontend](https://media-sequencer-frontend.onrender.com)
 - Backend: <https://multi-window-media-sequencer.onrender.com>
 - Health check: <https://multi-window-media-sequencer.onrender.com/health>
-
-Replace `<https://media-sequencer-frontend.onrender.com>` with the deployed React frontend URL.
 
 ## Features
 
