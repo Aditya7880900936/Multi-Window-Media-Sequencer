@@ -78,13 +78,13 @@ func Seed(db *gorm.DB) error {
 		// Window 2
 		{
 			WindowID: windows[1].ID,
-			MediaID: media[1].ID,
+			MediaID:  media[1].ID,
 			Position: 1,
 			Duration: media[1].Duration,
 		},
 		{
 			WindowID: windows[1].ID,
-			MediaID: media[2].ID,
+			MediaID:  media[2].ID,
 			Position: 2,
 			Duration: media[2].Duration,
 		},
@@ -92,13 +92,13 @@ func Seed(db *gorm.DB) error {
 		// Window 3
 		{
 			WindowID: windows[2].ID,
-			MediaID: media[2].ID,
+			MediaID:  media[2].ID,
 			Position: 1,
 			Duration: media[2].Duration,
 		},
 		{
 			WindowID: windows[2].ID,
-			MediaID: media[0].ID,
+			MediaID:  media[0].ID,
 			Position: 2,
 			Duration: media[0].Duration,
 		},

@@ -19,8 +19,8 @@ func NewSyncHandler(service *service.SyncService) *SyncHandler {
 }
 
 type SyncRequest struct {
-	MediaID uint `json:"mediaId" binding:"required"`
-	Duration int `json:"duration" binding:"required"`
+	MediaID  uint `json:"mediaId" binding:"required"`
+	Duration int  `json:"duration" binding:"required"`
 }
 
 func (h *SyncHandler) Sync(c *gin.Context) {

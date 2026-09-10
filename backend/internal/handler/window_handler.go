@@ -3,6 +3,7 @@ package handler
 import (
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 
@@ -50,5 +51,42 @@ func (h *WindowHandler) GetByID(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"data": window,
+	})
+}
+
+func (h *WindowHandler) GetCurrentPlayback(c *gin.Context) {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 32)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "invalid window id",
+		})
+		return
+	}
+
+	// For now, use the Unix epoch as the global cycle start.
+	cycleStart := time.Unix(0, 0).UTC()
+	now := time.Now().UTC()
+
+	playback, err := h.service.GetCurrentPlayback(
+		uint(id),
+		cycleStart,
+		now,
+	)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{
+			"error": "window not found",
+		})
+		return
+	}
+
+	if playback == nil {
+		c.JSON(http.StatusOK, gin.H{
+			"data": nil,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"data": playback,
 	})
 }

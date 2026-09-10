@@ -3,10 +3,10 @@ package model
 import "time"
 
 type Window struct {
-	ID        uint         `gorm:"primaryKey" json:"id"`
-	Name      string       `json:"name"`
-	CreatedAt time.Time    `json:"createdAt"`
-	UpdatedAt time.Time    `json:"updatedAt"`
+	ID        uint           `gorm:"primaryKey" json:"id"`
+	Name      string         `json:"name"`
+	CreatedAt time.Time      `json:"createdAt"`
+	UpdatedAt time.Time      `json:"updatedAt"`
 	Playlist  []PlaylistItem `json:"playlist,omitempty"`
 }
 

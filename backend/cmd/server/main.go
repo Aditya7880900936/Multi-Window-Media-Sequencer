@@ -48,7 +48,12 @@ func main() {
 	playlistRepo := repository.NewPlaylistRepository(db)
 
 	// Services
-	windowService := service.NewWindowService(windowRepo)
+	sequencer := service.NewSequencer()
+
+	windowService := service.NewWindowService(
+		windowRepo,
+		sequencer,
+	)
 	mediaService := service.NewMediaService(mediaRepo)
 	playlistService := service.NewPlaylistService(playlistRepo)
 
@@ -84,6 +89,7 @@ func main() {
 	// Windows
 	api.GET("/windows", windowHandler.GetAll)
 	api.GET("/windows/:id", windowHandler.GetByID)
+	api.GET("/windows/:id/current", windowHandler.GetCurrentPlayback)
 
 	// Media
 	api.GET("/media", mediaHandler.GetAll)
