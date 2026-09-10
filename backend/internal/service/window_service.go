@@ -10,15 +10,18 @@ import (
 type WindowService struct {
 	repo      *repository.WindowRepository
 	sequencer *Sequencer
+	cycleRepo *repository.PlaybackCycleRepository
 }
 
 func NewWindowService(
 	repo *repository.WindowRepository,
 	sequencer *Sequencer,
+	cycleRepo *repository.PlaybackCycleRepository,
 ) *WindowService {
 	return &WindowService{
 		repo:      repo,
 		sequencer: sequencer,
+		cycleRepo: cycleRepo,
 	}
 }
 
@@ -32,7 +35,6 @@ func (s *WindowService) GetByID(id uint) (*model.Window, error) {
 
 func (s *WindowService) GetCurrentPlayback(
 	id uint,
-	cycleStart time.Time,
 	now time.Time,
 ) (*PlaybackState, error) {
 	window, err := s.repo.GetByID(id)
@@ -40,9 +42,14 @@ func (s *WindowService) GetCurrentPlayback(
 		return nil, err
 	}
 
+	cycle, err := s.cycleRepo.GetOrCreate()
+	if err != nil {
+		return nil, err
+	}
+
 	return s.sequencer.GetCurrentPlayback(
 		window.Playlist,
-		cycleStart,
+		cycle.StartedAt,
 		now,
 	), nil
 }

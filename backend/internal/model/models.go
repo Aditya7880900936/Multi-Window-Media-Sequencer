@@ -31,6 +31,13 @@ type PlaylistItem struct {
 	Media Media `gorm:"foreignKey:MediaID" json:"media"`
 }
 
+type PlaybackCycle struct {
+	ID        uint      `gorm:"primaryKey" json:"id"`
+	StartedAt time.Time `json:"startedAt"`
+	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `json:"updatedAt"`
+}
+
 type SyncEvent struct {
 	ID        uint      `gorm:"primaryKey" json:"id"`
 	MediaID   uint      `json:"mediaId"`

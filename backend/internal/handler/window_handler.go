@@ -64,13 +64,9 @@ func (h *WindowHandler) GetCurrentPlayback(c *gin.Context) {
 	}
 
 	// For now, use the Unix epoch as the global cycle start.
-	cycleStart := time.Unix(0, 0).UTC()
-	now := time.Now().UTC()
-
 	playback, err := h.service.GetCurrentPlayback(
 		uint(id),
-		cycleStart,
-		now,
+		time.Now().UTC(),
 	)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{

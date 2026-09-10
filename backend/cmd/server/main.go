@@ -33,6 +33,7 @@ func main() {
 		&model.Media{},
 		&model.PlaylistItem{},
 		&model.SyncEvent{},
+		&model.PlaybackCycle{},
 	)
 	if err != nil {
 		panic(err)
@@ -46,6 +47,7 @@ func main() {
 	windowRepo := repository.NewWindowRepository(db)
 	mediaRepo := repository.NewMediaRepository(db)
 	playlistRepo := repository.NewPlaylistRepository(db)
+	cycleRepo := repository.NewPlaybackCycleRepository(db)
 
 	// Services
 	sequencer := service.NewSequencer()
@@ -53,6 +55,7 @@ func main() {
 	windowService := service.NewWindowService(
 		windowRepo,
 		sequencer,
+		cycleRepo,
 	)
 	mediaService := service.NewMediaService(mediaRepo)
 	playlistService := service.NewPlaylistService(playlistRepo)
