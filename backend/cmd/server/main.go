@@ -1,7 +1,9 @@
 package main
 
 import (
+	"log"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 
@@ -137,8 +139,12 @@ func main() {
 
 	// Sync
 	api.POST("/sync", syncHandler.Sync)
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
 
-	if err := router.Run(":8080"); err != nil {
-		panic(err)
+	if err := router.Run("0.0.0.0:" + port); err != nil {
+		log.Fatal(err)
 	}
 }
