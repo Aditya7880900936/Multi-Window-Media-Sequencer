@@ -32,10 +32,9 @@ func (h *SyncHandler) Sync(c *gin.Context) {
 		})
 		return
 	}
-
 	if err := h.service.Sync(req.MediaID, req.Duration); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "failed to sync media",
+			"error": err.Error(),
 		})
 		return
 	}

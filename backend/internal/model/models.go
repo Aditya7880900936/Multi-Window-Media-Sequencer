@@ -47,3 +47,13 @@ type SyncEvent struct {
 
 	Media Media `json:"media"`
 }
+
+type ActiveSync struct {
+	ID        uint      `gorm:"primaryKey" json:"id"`
+	MediaID   uint      `json:"mediaId"`
+	StartedAt time.Time `json:"startedAt"`
+	Duration  int       `json:"duration"`
+	CreatedAt time.Time `json:"createdAt"`
+
+	Media Media `gorm:"foreignKey:MediaID" json:"media"`
+}

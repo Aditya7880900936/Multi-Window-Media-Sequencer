@@ -34,6 +34,7 @@ func main() {
 		&model.PlaylistItem{},
 		&model.SyncEvent{},
 		&model.PlaybackCycle{},
+		&model.ActiveSync{},
 	)
 	if err != nil {
 		panic(err)
@@ -42,6 +43,10 @@ func main() {
 	if err := database.Seed(db); err != nil {
 		panic(err)
 	}
+
+	// WebSocket Hub
+	hub := ws.NewHub()
+	go hub.Run()
 
 	// Repositories
 	windowRepo := repository.NewWindowRepository(db)
@@ -52,20 +57,20 @@ func main() {
 	// Services
 	sequencer := service.NewSequencer()
 
+	// Sync Service
+	syncService := service.NewSyncService(db, hub)
+
 	windowService := service.NewWindowService(
 		windowRepo,
 		sequencer,
 		cycleRepo,
+		syncService,
 	)
 	mediaService := service.NewMediaService(mediaRepo)
-	playlistService := service.NewPlaylistService(playlistRepo)
-
-	// WebSocket Hub
-	hub := ws.NewHub()
-	go hub.Run()
-
-	// Sync Service
-	syncService := service.NewSyncService(db, hub)
+	playlistService := service.NewPlaylistService(
+		playlistRepo,
+		hub,
+	)
 
 	// Handlers
 	windowHandler := handler.NewWindowHandler(windowService)
